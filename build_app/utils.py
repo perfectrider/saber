@@ -2,10 +2,13 @@ import yaml
 
 
 def get_sorted_tasks(build_name):
-    with open('builds/tasks.yaml') as f:
-        tasks = yaml.safe_load(f)['tasks']
-    with open('builds/builds.yaml') as f:
-        builds = yaml.safe_load(f)['builds']
+    try:
+        with open('builds/tasks.yaml') as f:
+            tasks = yaml.safe_load(f)['tasks']
+        with open('builds/builds.yaml') as f:
+            builds = yaml.safe_load(f)['builds']
+    except (FileNotFoundError, IOError) as e:
+        raise ValueError(f'Error loading build files: {str(e)}')
 
     build = next((b for b in builds if b['name'] == build_name), None)
     if not build:
